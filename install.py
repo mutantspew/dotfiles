@@ -13,12 +13,16 @@ except OSError:
 
 def add_arg_options(parser):
   parser.add_argument('-c', '--config-file', nargs = 1, dest = 'config_file',
-                      help = 'run commands given in CONFIGFILE', metavar = 'CONFIGFILE', required = True,
+                      help = 'run commands given in CONFIGFILE', metavar = 'CONFIGFILE', #required = True,
                       default = 'config.yaml')
 
 def read_config(config_file):
-  with open(config_file, "r") as f:
-    data = yaml.load(f)
+  try:
+    with open(config_file, "r") as f:
+      data = yaml.load(f)
+  except IOError:
+    print("{}: file not found".format(config_file))
+    os.exit()
 
   return data
 
@@ -27,8 +31,8 @@ def backup_files(list):
   files = list.split(' ')
   dst = os.path.expanduser("~") + "/.backup-dotfiles"
 
-  print (dst)
-  print (os.path.exists(dst))
+  print("{} Exits? {}".format(dst, os.path.exists(dst)))
+
   # check if there is already a backup dir, if not make it
   if( not os.path.exists(dst)):
     print("creating directory " + dst)
@@ -54,13 +58,15 @@ def link_files(list):
 
 def main():
   try:
+    # create the parser and add our options to look for
     parser = ArgumentParser()
+    add_arg_options(parser)
 
-    #add_arg_options(parser)
-
+    # parse the arguments
     options = parser.parse_args()
 
-    data = read_config('config.yaml')
+    # read our config file
+    data = read_config(options.config_file)
 
     for k, v in data.items():
       if(k == 'backup'):

@@ -1,5 +1,4 @@
 backup:
-  # bash
   .bashrc
   .bash_profile
   .bash_login
