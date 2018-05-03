@@ -1,0 +1,25 @@
+backup:
+  # bash
+  .bashrc
+  .bash_profile
+  .bash_login
+  .bash_logout
+  .histfile
+  .profile
+  .zshrc
+  .zlogin
+  .zsh_history
+  .zsh-update
+  .gemrc
+
+install:
+  git
+
+link:
+  # terminal
+
+  # sublime-text
+  #"~/.config/sublime-text-3/Packages/User/"
+  "~/Desktop/sublime-text/":
+    path: subl-config
+    create: true
