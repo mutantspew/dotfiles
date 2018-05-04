@@ -52,11 +52,14 @@ def install_files(list):
       print("Installing: {}".format(v))
 
       # install the package
-      ret = subprocess.run(['sudo', 'apt-get', 'install', v, '-y'], stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+      try:
+        ret = subprocess.run(['sudo', 'apt-get', 'install', v], check = True)
+      except subprocess.CalledProcessError as err:
+        print('Error: ', err) # an error occured
+      else:
+        print("package installed") # everything went well, package installed
 
-      if(ret.returncode != 0):
-        print("An error occurred installing {}".format(v))
-    else:
+    else: # package is already installed
       print("{} is already installed".format(v))
 
 
