@@ -12,7 +12,8 @@ backup:
   .gemrc
 
 install:
-  git
+  - git
+  - sublime-text
 
 link:
   # terminal

@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 
-import os, sys, shutil
+import os, sys, shutil, subprocess
 from argparse import ArgumentParser
-#from .config import ConfigReader, ReaderError
 
 try:
   import yaml
 except OSError:
   print("pyyaml required. use pip to install")
-  os.exit()
+  sys.exit()
 
 
 def add_arg_options(parser):
@@ -20,9 +19,9 @@ def read_config(config_file):
   try:
     with open(config_file, "r") as f:
       data = yaml.load(f)
-  except IOError:
+  except FileNotFoundError:
     print("{}: file not found".format(config_file))
-    os.exit()
+    sys.exit()
 
   return data
 
@@ -48,15 +47,31 @@ def backup_files(list):
 
 
 def install_files(list):
-  #for v in list.items():
-   # print (v)
-  pass
+  for v in list:
+    if shutil.which(v) is None: # package doesn't exist
+      print("Installing: {}".format(v))
+
+      # install the package
+      ret = subprocess.run(['sudo', 'apt-get', 'install', v, '-y'], stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+
+      if(ret.returncode != 0):
+        print("An error occurred installing {}".format(v))
+    else:
+      print("{} is already installed".format(v))
+
 
 def link_files(list):
   pass
 
+def check_root():
+  if(os.getuid() != 0):
+    print ("must be root to run")
+    sys.exit()
 
 def main():
+  #check to see if we are root first
+  check_root()
+
   try:
     # create the parser and add our options to look for
     parser = ArgumentParser()
@@ -70,7 +85,8 @@ def main():
 
     for k, v in data.items():
       if(k == 'backup'):
-        backup_files(v)
+        #backup_files(v)
+        pass
       elif (k == 'install'):
         install_files(v)
       elif (k == 'link'):
