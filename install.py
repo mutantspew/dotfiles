@@ -42,8 +42,12 @@ def backup_files(list):
     path = os.path.expanduser("~") + "/" + f
 
     if(os.path.isfile(path)): #exits
-      print("Moving " + path + " to " + dst)
-      shutil.move(path, dst)
+      try:
+        shutil.move(path, dst)
+      except Exception as e:
+        print("Skipped file: ", path)
+      else:
+        print("Moving " + path + " to " + dst)
 
 
 def install_files(list):
@@ -64,7 +68,22 @@ def install_files(list):
 
 
 def link_files(list):
-  pass
+  for k, v in list.items():
+    if(os.path.exists(v)): # if we have a config file for it
+      dest_file = os.path.expanduser(k)
+
+      if(not os.path.islink(dest_file)): # we don't need to link if it already is
+        source_file = os.path.abspath(v)
+        
+        try:
+          os.symlink(source_file, dest_file)
+        except OSError as e:
+          print('Failed to link file: ', dest_file)
+        else:
+          print ("Linked file: {} -> {}".format(dest_file, source_file))
+      else: #
+        print ("{} already linked".format(dest_file))
+    
 
 def check_root():
   if(os.getuid() != 0):
@@ -88,12 +107,16 @@ def main():
 
     for k, v in data.items():
       if(k == 'backup'):
-        #backup_files(v)
-        pass
+        backup_files(v)
+        # pass
+
       elif (k == 'install'):
-        install_files(v)
+        #install_files(v)
+        pass
+
       elif (k == 'link'):
         link_files(v)
+
       else:
         pass
 
