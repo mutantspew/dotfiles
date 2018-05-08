@@ -1,0 +1,27 @@
+colored logging messages -- logging class?
+overwrite questions?
+
+subl configs
+
+git-config questions
+  -username
+  -email
+
+ssh?
+  -create keys?
+
+menu system? -- just leave as one script?
+  -- make it menu with arg option?
+
+check for zsh
+  - config oh-my-zsh 
+  - install zsh
+
+split into classes?
+
+
+make sublime-text its own entry
+
+
+better zsh/bash aliases and split files -- maybe make as one file in common dir
+  - source this file in each

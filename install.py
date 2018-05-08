@@ -3,6 +3,8 @@
 import os, sys, shutil, subprocess
 from argparse import ArgumentParser
 
+import scripts/log
+
 try:
   import yaml
 except OSError:
@@ -20,7 +22,7 @@ def read_config(config_file):
     with open(config_file, "r") as f:
       data = yaml.load(f)
   except FileNotFoundError:
-    print("{}: file not found".format(config_file))
+    Log.print("{}: file not found".format(config_file), LogLevel.Error)
     sys.exit()
 
   return data
@@ -30,11 +32,11 @@ def backup_files(list):
   files = list.split(' ')
   dst = os.path.expanduser("~") + "/.backup-dotfiles"
 
-  print("{} Exits? {}".format(dst, os.path.exists(dst)))
+  Log.print("{} Exits? {}".format(dst, os.path.exists(dst)), LogLevel.Debug)
 
   # check if there is already a backup dir, if not make it
   if( not os.path.exists(dst)):
-    print("creating directory " + dst)
+    Log.print("creating directory " + dst, LogLevel.Info)
     os.makedirs(dst)
 
   #loop through our files, if it exits move it to the backup directory
@@ -45,9 +47,9 @@ def backup_files(list):
       try:
         shutil.move(path, dst)
       except Exception as e:
-        print("Skipped file: ", path)
+        Log.print("Skipped file: {}".format(path), LogLevel.Warn)
       else:
-        print("Moving " + path + " to " + dst)
+        Log.print("Moving {} to {}".format(path, dst), LogLevel.Info)
 
 
 def install_files(list):
@@ -87,7 +89,7 @@ def link_files(list):
 
 def check_root():
   if(os.getuid() != 0):
-    print ("must be root to run")
+    Log.print("must be root to run", LogLevel.Error)
     sys.exit()
 
 def main():
@@ -111,7 +113,7 @@ def main():
         # pass
 
       elif (k == 'install'):
-        #install_files(v)
+        install_files(v)
         pass
 
       elif (k == 'link'):

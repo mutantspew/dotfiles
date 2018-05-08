@@ -14,7 +14,6 @@ backup:
 
 install:
   - git
-  - sublime-text
 
 link:
   ~/.gitconfig: config/git/.gitconfig
@@ -32,3 +31,9 @@ link:
 #  "~/Desktop/sublime-text/":
 #    path: subl-config
 #    create: true
+
+sublime:
+  install: true
+  config_path: "~/.config/sublime-text-3/Packages/User/"
+  package: sublime-text
+  which_package: subl
