@@ -3,7 +3,9 @@
 import os, sys, shutil, subprocess
 from argparse import ArgumentParser
 
-import scripts/log
+sys.path.insert(0, 'scripts')
+import log
+from log import LogLevel
 
 try:
   import yaml
@@ -11,6 +13,7 @@ except OSError:
   print("pyyaml required. use pip to install")
   sys.exit()
 
+log = log.Log()
 
 def add_arg_options(parser):
   parser.add_argument('-c', '--config-file', nargs = 1, dest = 'config_file',
@@ -22,7 +25,7 @@ def read_config(config_file):
     with open(config_file, "r") as f:
       data = yaml.load(f)
   except FileNotFoundError:
-    Log.print("{}: file not found".format(config_file), LogLevel.Error)
+    log.print("{}: file not found".format(config_file), LogLevel.Error)
     sys.exit()
 
   return data
@@ -32,11 +35,11 @@ def backup_files(list):
   files = list.split(' ')
   dst = os.path.expanduser("~") + "/.backup-dotfiles"
 
-  Log.print("{} Exits? {}".format(dst, os.path.exists(dst)), LogLevel.Debug)
+  log.print("{} Exits? {}".format(dst, os.path.exists(dst)), LogLevel.Debug)
 
   # check if there is already a backup dir, if not make it
   if( not os.path.exists(dst)):
-    Log.print("creating directory " + dst, LogLevel.Info)
+    log.print("creating directory " + dst, LogLevel.Info)
     os.makedirs(dst)
 
   #loop through our files, if it exits move it to the backup directory
@@ -47,9 +50,9 @@ def backup_files(list):
       try:
         shutil.move(path, dst)
       except Exception as e:
-        Log.print("Skipped file: {}".format(path), LogLevel.Warn)
+        log.print("Skipped file: {}".format(path), LogLevel.Warn)
       else:
-        Log.print("Moving {} to {}".format(path, dst), LogLevel.Info)
+        log.print("Moving {} to {}".format(path, dst), LogLevel.Info)
 
 
 def install_files(list):
@@ -61,12 +64,12 @@ def install_files(list):
       try:
         ret = subprocess.run(['sudo', 'apt-get', 'install', v], check = True)
       except subprocess.CalledProcessError as err:
-        print('Error: ', err) # an error occured
+        log.print("Error: {}".format(err), LogLevel.Error) # an error occured
       else:
-        print("package installed") # everything went well, package installed
+        log.print("{} installed".format(v), LogLevel.Info) # everything went well, package installed
 
     else: # package is already installed
-      print("{} is already installed".format(v))
+      log.print("{} is already installed".format(v), LogLevel.Info)
 
 
 def link_files(list):
@@ -80,16 +83,16 @@ def link_files(list):
         try:
           os.symlink(source_file, dest_file)
         except OSError as e:
-          print('Failed to link file: ', dest_file)
+          log.print("Failed to link file: {}".format(dest_file), LogLevel.Error)
         else:
-          print ("Linked file: {} -> {}".format(dest_file, source_file))
+          log.print("Linked file: {} -> {}".format(dest_file, source_file), LogLevel.Info)
       else: #
-        print ("{} already linked".format(dest_file))
+        log.print("{} already linked".format(dest_file), LogLevel.Warn)
     
 
 def check_root():
   if(os.getuid() != 0):
-    Log.print("must be root to run", LogLevel.Error)
+    log.print("must be root to run", LogLevel.Error)
     sys.exit()
 
 def main():
@@ -123,7 +126,7 @@ def main():
         pass
 
   except OSError:
-    print("FIALED SPLATESDSDEHLKJA:HFU*IH")
+    log.print("FIALED SPLATESDSDEHLKJA:HFU*IH", LogLevel.Error)
 
 
 main()
