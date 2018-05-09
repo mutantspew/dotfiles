@@ -4,7 +4,7 @@ from enum import Enum
 class Color:
   Default = '\x1b[39m'
 
-  Blue = '\x1b[34m'
+  Blue = '\x1b[36m'
   Green = '\x1b[32m'
   Red = '\x1b[31m'
   Yellow = '\x1b[33m'
@@ -37,7 +37,7 @@ class Log(object):
       print(msg)
 
   def _print_info(self, msg):
-    print(Color.Default + msg + Color.EndColor)
+    print(Color.Green + msg + Color.EndColor)
 
   def _print_debug(self, msg):
     print(Color.Blue + msg + Color.EndColor)
