@@ -7,6 +7,8 @@ sys.path.insert(0, 'scripts')
 import log
 from log import LogLevel
 
+import sublime
+
 try:
   import yaml
 except OSError:
@@ -112,15 +114,20 @@ def main():
 
     for k, v in data.items():
       if(k == 'backup'):
-        backup_files(v)
-        # pass
+        # backup_files(v)
+        pass
 
       elif (k == 'install'):
-        install_files(v)
+        # install_files(v)
         pass
 
       elif (k == 'link'):
-        link_files(v)
+        # link_files(v)
+        pass
+
+      elif (k == 'sublime'):
+        sub = sublime.Sublime(log, v)
+        sub.run()
 
       else:
         pass
