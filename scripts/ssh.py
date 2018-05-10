@@ -8,7 +8,7 @@ class SSH(object):
     super(SSH, self).__init__()
     self.log = log
 
-  def create_key(self, name, length, comment):
+  def create_key(self, name, size, comment):
     l = self.log
 
     l.print("Creating a new key", ll.Debug)
@@ -17,8 +17,8 @@ class SSH(object):
       args = ['ssh-keygen',
               '-C', comment, 
               '-t', 'rsa', 
-              '-b', length, 
-              '-f', os.path.expanduser("~/.ssh/" + name),
+              '-b', size, 
+              '-f', os.path.expanduser("~/.ssh/id_" + name),
               '-q',
               '-N', '']
       subprocess.run(args, check = True)

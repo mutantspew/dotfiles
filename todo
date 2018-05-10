@@ -1,9 +1,5 @@
 overwrite questions?
 
-git-config questions
-  -username
-  -email
-
 menu system? -- just leave as one script?
   -- make it menu with arg option?
 

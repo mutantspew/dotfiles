@@ -34,14 +34,25 @@ sublime:
   which_package: subl
 
 git:
-  github:
-    create_key: True
-    key_size: 4096
-    add_to_config: True
-  
-  bitbucket:
-    create_key: True
-    key_size: 4096
-    add_to_config: True
-
+  hosts:
+    github:
+      key:
+        create: True
+        name: "github"
+        size: "4096"
+        host: "github.com"
+        user: "git"
+        port: "22"
+        comment: "github account"
+      add_to_config: True
+    bitbucket:
+      key:
+        create: True
+        name: "bitbucket"
+        size: "4096"
+        host: "bitbucket.org"
+        user: "git"
+        port: "22"
+        comment: "bitbucket account"
+      add_to_config: True
   create_config_file: True
