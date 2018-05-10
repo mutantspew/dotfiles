@@ -10,6 +10,4 @@ class Git(object):
     self.log = log
     
   def key(self):
-    self.log.print("git.key", ll.Debug)
-    s = ssh.SSH(self.log)
-    s.create_key('id_test4096', "4096", 'test')
+    pass

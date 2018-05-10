@@ -27,5 +27,13 @@ class SSH(object):
     else:
       l.print("Done", ll.Debug)
 
-  def add_key_to_config(self, name, host, port, user, ident):
-    pass
+  def add_key_to_config(self, name, host, user, ident, port = 22):
+    str = """Host {}
+    HostName {}
+    Port {}
+    User {}
+    IdentityFile {}
+    IdentitiesOnly yes
+          """.format(name, host, port, user, ident)
+    with open(os.path.expanduser("~/.ssh/config"), 'a+') as f:
+      f.write("\n" + str)
