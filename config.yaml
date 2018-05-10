@@ -32,3 +32,16 @@ sublime:
   config_path: "~/.config/sublime-text-3/Packages/User/"
   package: sublime-text
   which_package: subl
+
+git:
+  github:
+    create_key: True
+    key_size: 4096
+    add_to_config: True
+  
+  bitbucket:
+    create_key: True
+    key_size: 4096
+    add_to_config: True
+
+  create_config_file: True

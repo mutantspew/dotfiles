@@ -8,6 +8,7 @@ import log
 from log import LogLevel
 
 import sublime
+import git
 
 try:
   import yaml
@@ -117,17 +118,23 @@ def main():
         # backup_files(v)
         pass
 
-      elif (k == 'install'):
+      elif(k == 'install'):
         # install_files(v)
         pass
 
-      elif (k == 'link'):
+      elif(k == 'link'):
         # link_files(v)
         pass
 
-      elif (k == 'sublime'):
-        sub = sublime.Sublime(log, v)
-        sub.run()
+      elif(k == 'sublime'):
+        # sub = sublime.Sublime(log, v)
+        # sub.run()
+        pass
+
+      elif(k == 'git'):
+        g = git.Git(log)
+        g.key()
+        pass
 
       else:
         pass
