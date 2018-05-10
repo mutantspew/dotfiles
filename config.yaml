@@ -43,7 +43,6 @@ git:
         host: "github.com"
         user: "git"
         port: "22"
-        comment: "github account"
       add_to_config: True
     bitbucket:
       key:

@@ -53,35 +53,40 @@ class Git(object):
 
     for host in hosts.items():
       key = host[1] # gets the key section
+      
 
-      create = key['key']['create']
+      create = self.check_key(key['key'], 'create')
+      name = self.check_key(key['key'], 'name')
+      host = self.check_key(key['key'], 'host')
+      size = self.check_key(key['key'], 'size')
+      user = self.check_key(key['key'], 'user')
+      port = self.check_key(key['key'], 'port')
+      comment = self.check_key(key['key'], 'comment')
+
+
+
       if(create == True):
         self.log.print("Create True", ll.Debug)
       else:
         self.log.print("Create False", ll.Debug)
 
-      name = key['key']['name']
-      self.log.print(name, ll.Debug)
 
-      host = key['key']['host']
-      self.log.print(host, ll.Debug)
-      
-      size = key['key']['size']
-      self.log.print(size, ll.Debug)
-
-      user = key['key']['user']
-      self.log.print(user, ll.Debug)
-
-      port = key['key']['port']
-      self.log.print(port, ll.Debug)
-
-      comment = key['key']['comment']
-      self.log.print(comment, ll.Debug)
 
       if(create == True): # create our key
         self.log.print("Creating ssh key")
-        self.ssh.create_key(name, size, comment)
+        # self.ssh.create_key(name, size, comment)
 
       if(key['add_to_config'] == True):
         self.log.print("Adding to .ssh/config")
-        self.ssh.add_key_to_config(name, host, user, "~/.ssh/id_" + name, port)
+        # self.ssh.add_key_to_config(name, host, user, "~/.ssh/id_" + name, port)
+  
+  # checks if key is in dictionary, if it is returns the value otherwise none
+  def check_key(self, dict, key):
+    self.log.print("Checking for {}".format(key), ll.Debug)
+
+    if(key in dict):
+      self.log.print('Found!', ll.Debug)
+      return dict[key]
+    else:
+      self.log.print('Not Found!', ll.Debug)
+      return None
