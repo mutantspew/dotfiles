@@ -52,33 +52,55 @@ class Git(object):
   def create_hosts(self, hosts):
 
     for host in hosts.items():
+      l = self.log
       key = host[1] # gets the key section
+
+
+      temp = self.check_key(key['key'], 'create')
+      create = temp if temp is not None else True
       
-
-      create = self.check_key(key['key'], 'create')
       name = self.check_key(key['key'], 'name')
-      host = self.check_key(key['key'], 'host')
-      size = self.check_key(key['key'], 'size')
-      user = self.check_key(key['key'], 'user')
-      port = self.check_key(key['key'], 'port')
-      comment = self.check_key(key['key'], 'comment')
 
+      if name is None:
+        l.print("Name is None", ll.Error)
+        sys.exit()
+
+      host = self.check_key(key['key'], 'host')
+
+      if host is None:
+        l.print("Host is None", ll.Error)
+        sys.exit()
+
+      temp = self.check_key(key['key'], 'size')
+      size = temp if temp is not None else "2048"
+      
+      user = self.check_key(key['key'], 'user')
+
+      if user is None:
+        l.print("User is None", ll.Error)
+        sys.exit()
+
+      temp = self.check_key(key['key'], 'port')
+      port = temp if temp is not None else "22"
+
+      temp = self.check_key(key['key'], 'comment')
+      comment = temp if temp is not None else ''
 
 
       if(create == True):
-        self.log.print("Create True", ll.Debug)
+        l.print("Create True", ll.Debug)
       else:
-        self.log.print("Create False", ll.Debug)
+        l.print("Create False", ll.Debug)
 
-
+      path = "~/.ssh/id_{}".format(name)
 
       if(create == True): # create our key
-        self.log.print("Creating ssh key")
-        # self.ssh.create_key(name, size, comment)
+        l.print("Creating ssh key")
+        self.ssh.create_key(path, size, comment)
 
       if(key['add_to_config'] == True):
-        self.log.print("Adding to .ssh/config")
-        # self.ssh.add_key_to_config(name, host, user, "~/.ssh/id_" + name, port)
+        l.print("Adding to .ssh/config")
+        self.ssh.add_key_to_config(name, host, user, path, port)
   
   # checks if key is in dictionary, if it is returns the value otherwise none
   def check_key(self, dict, key):
@@ -88,5 +110,5 @@ class Git(object):
       self.log.print('Found!', ll.Debug)
       return dict[key]
     else:
-      self.log.print('Not Found!', ll.Debug)
+      self.log.print("Key {} Not Found!".format(key), ll.Warn)
       return None

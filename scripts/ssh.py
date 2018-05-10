@@ -8,26 +8,29 @@ class SSH(object):
     super(SSH, self).__init__()
     self.log = log
 
-  def create_key(self, name, size, comment):
+  def create_key(self, path, size, comment):
     l = self.log
 
     l.print("Creating a new key", ll.Debug)
 
     try:
       args = ['ssh-keygen',
-              '-C', comment, 
+              '-C', comment,
               '-t', 'rsa', 
-              '-b', size, 
-              '-f', os.path.expanduser("~/.ssh/id_" + name),
+              '-b', size,
+              '-f', path,
               '-q',
               '-N', '']
+
+      l.print(args, ll.Debug)
+
       subprocess.run(args, check = True)
     except Exception as e:
       l.print("An error occurred creating a new key \n {}".format(e), ll.Error)
     else:
       l.print("Done", ll.Debug)
 
-  def add_key_to_config(self, name, host, user, ident, port = 22):
+  def add_key_to_config(self, name, host, user, ident, port):
     str = """Host {}
     HostName {}
     Port {}
@@ -35,5 +38,8 @@ class SSH(object):
     IdentityFile {}
     IdentitiesOnly yes
           """.format(name, host, port, user, ident)
+
+    self.log.print("Adding the following to the config file:\n{}".format(str), ll.Debug)
+
     with open(os.path.expanduser("~/.ssh/config"), 'a+') as f:
       f.write("\n" + str)

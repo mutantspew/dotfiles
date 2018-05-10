@@ -39,10 +39,10 @@ git:
       key:
         create: True
         name: "github"
-        size: "4096"
         host: "github.com"
         user: "git"
-        port: "22"
+        size: "4096"
+        comment: "github account"
       add_to_config: True
     bitbucket:
       key:
