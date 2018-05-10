@@ -12,8 +12,8 @@ class Color:
   EndColor = '\x1b[0m'
 
 class LogLevel(Enum):
-   Info = 0
-   Debug = 1
+   Debug = 0
+   Info = 1
    Warn = 2
    Error = 3
 

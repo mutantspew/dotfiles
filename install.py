@@ -132,8 +132,8 @@ def main():
         pass
 
       elif(k == 'git'):
-        g = git.Git(log)
-        g.key()
+        g = git.Git(log, v)
+        g.run()
         pass
 
       else:
