@@ -3,7 +3,7 @@ import os, shutil, subprocess, sys
 import log
 from log import LogLevel as ll
 
-import zsh, backup
+import link, backup
 
 class ZSH(object):
   """docstring for ZSH"""
@@ -26,10 +26,10 @@ class ZSH(object):
         return
 
       # set zsh as the default
-     self.self.set_zsh_default()
+    self.set_zsh_default()
 
-      if(self.check_oh_my_zsh_installed() is False):
-        self.install_oh_my_Zsh()
+    if(self.check_oh_my_zsh_installed() is False):
+      self.install_oh_my_Zsh()
 
     # backup zsh default configs
     self.backup_zsh_config()
@@ -42,7 +42,14 @@ class ZSH(object):
     return shutil.which('zsh')
 
   def check_oh_my_zsh_installed(self):
-    pass
+    self.log.print('Checking for Oh My Zsh', ll.Debug)
+
+    if(os.path.exists(os.path.expanduser('~/.oh-my-zsh'))):
+      self.log.print('Oh-My-Zsh installed', ll.Debug)
+      return True
+    else:
+      self.log.print('Oh-My-Zsh not installed', ll.Debug)
+      return False
 
   def install_zsh(self):
     self.log.print('Installing Zsh', ll.Debug)
@@ -57,7 +64,8 @@ class ZSH(object):
   def set_zsh_default(self):
     self.log.print('Setting Zsh as the default shell', ll.Debug)
     try:
-      ret = subprocess.run(['chsh', 'zsh'], check = True)
+      # ret = subprocess.run('/bin/bash -c "chsh -s "$(which zsh)""', shell = True)
+      ret = subprocess.run(['chsh', '-s', shutil.which('zsh')])
     except subprocess.CalledProcessError as err:
       self.log.print("Error: {}".format(err), ll.Error) # an error occurred
     else:
@@ -75,7 +83,15 @@ class ZSH(object):
       return True
 
   def backup_zsh_config(self):
-    pass
+    self.log.print('Backing up zsh config', ll.Info)
+
+    b = backup.Backup(log)
+
+    self.log.print('Done', ll.Debug)
 
   def link_zsh_config(self):
-    pass
+    self.log.print('Linking zsh config', ll.Info)
+
+    l = link.Link(log)
+
+    self.log.print('Done', ll.Debug)

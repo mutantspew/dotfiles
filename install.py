@@ -9,6 +9,7 @@ from log import LogLevel
 
 import sublime
 import git
+import zsh
 
 try:
   import yaml
@@ -100,7 +101,7 @@ def check_root():
 
 def main():
   #check to see if we are root first
-  check_root()
+  # check_root()
 
   try:
     # create the parser and add our options to look for
@@ -132,12 +133,15 @@ def main():
         pass
 
       elif(k == 'git'):
-        g = git.Git(log, v)
-        g.run()
+        # g = git.Git(log, v)
+        # g.run()
         pass
 
       else:
         pass
+
+    z = zsh.ZSH(log, data)
+    z.run()
 
   except OSError:
     log.print("FIALED SPLATESDSDEHLKJA:HFU*IH", LogLevel.Error)
