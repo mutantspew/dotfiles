@@ -10,12 +10,8 @@ from log import LogLevel
 import sublime
 import git
 import zsh
+import config
 
-try:
-  import yaml
-except OSError:
-  print("pyyaml required. use pip to install")
-  sys.exit()
 
 log = log.Log()
 
@@ -23,16 +19,6 @@ def add_arg_options(parser):
   parser.add_argument('-c', '--config-file', nargs = 1, dest = 'config_file',
                       help = 'run commands given in CONFIGFILE', metavar = 'CONFIGFILE', #required = True,
                       default = 'config.yaml')
-
-def read_config(config_file):
-  try:
-    with open(config_file, "r") as f:
-      data = yaml.load(f)
-  except FileNotFoundError:
-    log.print("{}: file not found".format(config_file), LogLevel.Error)
-    sys.exit()
-
-  return data
 
 
 def backup_files(list):
@@ -112,7 +98,11 @@ def main():
     options = parser.parse_args()
 
     # read our config file
-    data = read_config(options.config_file)
+    # data = read_config(options.config_file)
+    c = config.Config(log, options.config_file)
+    c.open()
+    data = c.get_raw_data()
+    c.get_keys()
 
     for k, v in data.items():
       if(k == 'backup'):
@@ -140,8 +130,8 @@ def main():
       else:
         pass
 
-    z = zsh.ZSH(log, data)
-    z.run()
+    # z = zsh.ZSH(log, data)
+    # z.run()
 
   except OSError:
     log.print("FIALED SPLATESDSDEHLKJA:HFU*IH", LogLevel.Error)
