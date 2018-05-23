@@ -11,3 +11,49 @@ split into classes?
 
 better zsh/bash aliases and split files -- maybe make as one file in common dir
   - source this file in each
+
+install.sh
+  install git in script to download repo from github and run install.py
+
+ssh-keys needs work
+  needs to check for .ssh folder before creating key
+  attempt to retry key if failed with different params
+  
+        Git Config
+        TODO RE-ENABLE GIT CONFIG
+        Checking for create
+        Found!
+        Checking for name
+        Found!
+        Checking for host
+        Found!
+        Checking for size
+        Found!
+        Checking for user
+        Found!
+        Checking for port
+        Key port Not Found!
+        Checking for comment
+        Found!
+        Create True
+        Creating ssh key
+        Creating a new key
+        An error occurred creating a new key 
+         must be str, not list
+        Adding to .ssh/config
+        Adding the following to the config file:
+        Host github
+            HostName github.com
+            Port 22
+            User git
+            IdentityFile ~/.ssh/id_github
+            IdentitiesOnly yes
+
+
+ruby/rvm/rails class installer
+  same for npm/nvm
+
+better error handling
+
+visual studio code
+  dotnet core
